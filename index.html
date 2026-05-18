@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokemon Memory Game</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- import jQuery - kept from the provided starter code -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="index.js"></script>
+</head>
+
+<body>
+  <main class="game_page">
+    <header class="title_area">
+      <h1>Pokemon Memory Game</h1>
+      <p>Match all Pokemon pairs before the timer runs out.</p>
+    </header>
+
+    <section class="controls" aria-label="game controls">
+      <label for="difficultySelect">Difficulty:</label>
+      <select id="difficultySelect">
+        <option value="easy">Easy - 3 pairs / 60s</option>
+        <option value="medium">Medium - 6 pairs / 90s</option>
+        <option value="hard">Hard - 8 pairs / 120s</option>
+      </select>
+      <button id="startBtn">Start</button>
+      <button id="resetBtn">Reset</button>
+      <button id="themeBtn">Dark Mode</button>
+      <button id="powerBtn">Power Up</button>
+    </section>
+
+    <section class="status_bar" aria-label="game status">
+      <div><span>Current Time</span><strong id="currentTime">--:--:--</strong></div>
+      <div><span>Time Left</span><strong id="timeLeft">60</strong></div>
+      <div><span>Time Elapsed</span><strong id="timeElapsed">0</strong></div>
+      <div><span>Clicks</span><strong id="clickCount">0</strong></div>
+      <div><span>Pairs Left</span><strong id="pairsLeft">3</strong></div>
+      <div><span>Pairs Matched</span><strong id="pairsMatched">0</strong></div>
+      <div><span>Total Pairs</span><strong id="totalPairs">3</strong></div>
+    </section>
+
+    <p id="message" class="message">Choose a difficulty and click Start.</p>
+
+    <!--
+      This section keeps the same basic structure as the provided starter code:
+      #game_grid contains .card elements, and every .card has .front_face and .back_face.
+      JavaScript later updates these cards with random Pokemon from PokeAPI.
+    -->
+    <div id="game_grid">
+      <div class="card">
+        <img id="img1" class="front_face" src="001.png" alt="Pokemon card front">
+        <img class="back_face" src="back.webp" alt="Pokemon card back">
+      </div>
+      <div class="card">
+        <img id="img2" class="front_face" src="002.png" alt="Pokemon card front">
+        <img class="back_face" src="back.webp" alt="Pokemon card back">
+      </div>
+      <div class="card">
+        <img id="img3" class="front_face" src="003.png" alt="Pokemon card front">
+        <img class="back_face" src="back.webp" alt="Pokemon card back">
+      </div>
+      <div class="card">
+        <img id="img4" class="front_face" src="001.png" alt="Pokemon card front">
+        <img class="back_face" src="back.webp" alt="Pokemon card back">
+      </div>
+      <div class="card">
+        <img id="img5" class="front_face" src="002.png" alt="Pokemon card front">
+        <img class="back_face" src="back.webp" alt="Pokemon card back">
+      </div>
+      <div class="card">
+        <img id="img6" class="front_face" src="003.png" alt="Pokemon card front">
+        <img class="back_face" src="back.webp" alt="Pokemon card back">
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>

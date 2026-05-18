@@ -1,0 +1,18 @@
+Student Name: Eric Guo
+Student Set: 2C
+
+[x] Each game played, a new set of randomly determined Pokemon cards.
+[x] Cards flip when clicked.
+[x] If the user clicks on the same card twice, do nothing.
+[x] If the user clicks on a card that is already matched, do nothing.
+[x] If the user clicks on a card while two cards are already flipped or are currently flipping, do nothing.
+[x] Winning Event is implemented.
+[x] Losing Event is implemented.
+[x] Status section shows the number of clicks, pairs left, pairs matched, total pairs, and game timer.
+[x] Start and Reset buttons are added to the game.
+[x] Difficulty levels are added to the game.
+[x] Themes are added to the game.
+[x] Power-up logic is added to the game.
+[x] The website has an appealing, professional and consistent look.
+
+Self-graded total: 70/70
