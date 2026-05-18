@@ -72,7 +72,7 @@ async function startGame() {
   updateStatus();
 }
 
-// Reset the game
+// ======= 5. Difficulty, reset, power-up, and theme logic =======
 function resetGame() {
   const level = $("#difficultySelect").val();
   const settings = difficulties[level];
@@ -106,7 +106,7 @@ function resetState(settings) {
   $("#powerBtn").prop("disabled", false);
 }
 
-// Fetch random Pokémon data from PokéAPI
+// ======= 1. Fetch random Pokémon data from PokéAPI =======
 async function getRandomPokemon(count) {
   const listResponse = await fetch(POKEMON_LIST_URL);
 
@@ -175,7 +175,7 @@ function getFallbackPokemon(count) {
   return fallback.slice(0, count);
 }
 
-// Generate the cards dynamically and build the game board
+// ======= 2. Generate the cards dynamically =======
 function buildBoard(pokemonList, columns) {
   const cards = [];
 
@@ -216,7 +216,7 @@ function shuffle(array) {
   }
 }
 
-// Handle the card flipping and matching logic
+// ======= 3. Handle card flipping and matching logic =======
 function flipCard() {
   if (!gameActive || gameEnded || lockBoard) {
     return;
@@ -298,7 +298,7 @@ function resetTurn() {
   lockBoard = false;
 }
 
-// Update the timer during the game
+// ======= 4. Update timer and status header =======
 function startTimer() {
   clearInterval(timer);
 
