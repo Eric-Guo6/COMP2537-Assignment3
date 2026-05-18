@@ -1,15 +1,3 @@
-/*
- * Assignment 3 - Pokemon Memory Game
- * Student: Eric Guo
- * Set: 2C
- *
- * This version is completed on top of the provided starter code structure.
- * The starter code used #game_grid, .card, .front_face, .back_face, .flip,
- * and jQuery click events. I kept those core parts and added the required
- * assignment features: random Pokemon API cards, timer, status header,
- * difficulty levels, themes, start/reset buttons, and a power-up.
- */
-
 const POKEMON_LIST_URL = "https://pokeapi.co/api/v2/pokemon?limit=1500";
 const FLIP_DELAY_MS = 900;
 const POWER_UP_MS = 2000;
@@ -125,7 +113,8 @@ async function getRandomPokemon(count) {
   const usedIds = new Set();
 
   while (chosenPokemon.length < count) {
-    const randomPokemon = allPokemon[Math.floor(Math.random() * allPokemon.length)];
+    const randomPokemon =
+      allPokemon[Math.floor(Math.random() * allPokemon.length)];
     const id = getPokemonIdFromUrl(randomPokemon.url);
 
     if (usedIds.has(id)) {
@@ -312,7 +301,10 @@ function endGame(didWin) {
   if (didWin) {
     showMessage("You win! All Pokemon pairs were matched.", "win");
   } else {
-    showMessage("Game over! The timer ran out before all pairs were matched.", "lose");
+    showMessage(
+      "Game over! The timer ran out before all pairs were matched.",
+      "lose",
+    );
   }
 }
 
@@ -324,7 +316,9 @@ function usePowerUp() {
   powerUpUsed = true;
   lockBoard = true;
   $("#powerBtn").prop("disabled", true);
-  showMessage("Power up activated! All unmatched cards are shown for 2 seconds.");
+  showMessage(
+    "Power up activated! All unmatched cards are shown for 2 seconds.",
+  );
 
   const cardsToShow = $(".card").not(".matched");
   cardsToShow.addClass("flip");
@@ -332,7 +326,11 @@ function usePowerUp() {
   setTimeout(function () {
     cardsToShow.each(function () {
       const card = $(this);
-      if (!card.hasClass("matched") && card[0] !== firstCard?.[0] && card[0] !== secondCard?.[0]) {
+      if (
+        !card.hasClass("matched") &&
+        card[0] !== firstCard?.[0] &&
+        card[0] !== secondCard?.[0]
+      ) {
         card.removeClass("flip");
       }
     });
