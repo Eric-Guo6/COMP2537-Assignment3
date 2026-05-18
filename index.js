@@ -23,6 +23,7 @@ let timer = undefined;
 let powerUpUsed = false;
 let currentTheme = "light";
 
+// Set up the game and button events
 function setup() {
   updateClock();
   setInterval(updateClock, 1000);
@@ -37,12 +38,13 @@ function setup() {
   updateStatus();
 }
 
+// Use jQuery click logic like the starter code
 function setupCards() {
-  // This keeps the same jQuery click style as the provided starter code.
   $(".card").off("click");
   $(".card").on("click", flipCard);
 }
 
+// Start a new game
 async function startGame() {
   const level = $("#difficultySelect").val();
   const settings = difficulties[level];
@@ -70,9 +72,11 @@ async function startGame() {
   updateStatus();
 }
 
+// Reset the game
 function resetGame() {
   const level = $("#difficultySelect").val();
   const settings = difficulties[level];
+
   resetState(settings);
 
   const fallbackPokemon = getFallbackPokemon(settings.pairs);
@@ -81,6 +85,7 @@ function resetGame() {
   updateStatus();
 }
 
+// Reset all game variables
 function resetState(settings) {
   clearInterval(timer);
   timer = undefined;
@@ -101,8 +106,10 @@ function resetState(settings) {
   $("#powerBtn").prop("disabled", false);
 }
 
+// Fetch random Pokémon data from PokéAPI
 async function getRandomPokemon(count) {
   const listResponse = await fetch(POKEMON_LIST_URL);
+
   if (!listResponse.ok) {
     throw new Error("Pokemon list did not load.");
   }
@@ -115,6 +122,7 @@ async function getRandomPokemon(count) {
   while (chosenPokemon.length < count) {
     const randomPokemon =
       allPokemon[Math.floor(Math.random() * allPokemon.length)];
+
     const id = getPokemonIdFromUrl(randomPokemon.url);
 
     if (usedIds.has(id)) {
@@ -122,6 +130,7 @@ async function getRandomPokemon(count) {
     }
 
     const detailResponse = await fetch(randomPokemon.url);
+
     if (!detailResponse.ok) {
       continue;
     }
@@ -134,6 +143,7 @@ async function getRandomPokemon(count) {
     }
 
     usedIds.add(id);
+
     chosenPokemon.push({
       id: detail.id,
       name: detail.name,
@@ -144,10 +154,12 @@ async function getRandomPokemon(count) {
   return chosenPokemon;
 }
 
+// Get Pokémon id from the API url
 function getPokemonIdFromUrl(url) {
   return url.split("/").filter(Boolean).pop();
 }
 
+// Backup cards if PokéAPI cannot load
 function getFallbackPokemon(count) {
   const fallback = [
     { id: 1, name: "bulbasaur", image: "001.png" },
@@ -163,6 +175,7 @@ function getFallbackPokemon(count) {
   return fallback.slice(0, count);
 }
 
+// Generate the cards dynamically and build the game board
 function buildBoard(pokemonList, columns) {
   const cards = [];
 
@@ -172,6 +185,7 @@ function buildBoard(pokemonList, columns) {
   });
 
   shuffle(cards);
+
   $("#game_grid").css("--columns", columns);
   $("#game_grid").empty();
 
@@ -182,8 +196,8 @@ function buildBoard(pokemonList, columns) {
   setupCards();
 }
 
+// Same card structure as the starter code, but images come from PokéAPI
 function buildCardHtml(pokemon, index) {
-  // Same card structure as the starter code, but the image is filled by PokeAPI.
   return `
     <div class="card" data-pokemon-id="${pokemon.id}" data-pokemon-name="${pokemon.name}">
       <img id="img${index}" class="front_face" src="${pokemon.image}" alt="${pokemon.name}">
@@ -192,6 +206,7 @@ function buildCardHtml(pokemon, index) {
   `;
 }
 
+// Shuffle cards before displaying them
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -201,6 +216,7 @@ function shuffle(array) {
   }
 }
 
+// Handle the card flipping and matching logic
 function flipCard() {
   if (!gameActive || gameEnded || lockBoard) {
     return;
@@ -208,12 +224,12 @@ function flipCard() {
 
   const clickedCard = $(this);
 
-  // Edge case: already matched cards should not flip again.
+  // Prevent clicking matched cards again
   if (clickedCard.hasClass("matched")) {
     return;
   }
 
-  // Edge case: clicking the same card twice should do nothing.
+  // Prevent clicking the same card twice
   if (firstCard && clickedCard[0] === firstCard[0]) {
     return;
   }
@@ -228,10 +244,14 @@ function flipCard() {
   }
 
   secondCard = clickedCard;
+
+  // Prevent users from flipping more than two cards at the same time
   lockBoard = true;
+
   checkForMatch();
 }
 
+// Check if the two selected cards match
 function checkForMatch() {
   const firstPokemon = firstCard.data("pokemon-id");
   const secondPokemon = secondCard.data("pokemon-id");
@@ -243,11 +263,12 @@ function checkForMatch() {
   }
 }
 
+// Handle matched cards
 function handleMatch() {
   firstCard.addClass("matched");
   secondCard.addClass("matched");
 
-  // Same idea as the starter code: matched cards no longer have click events.
+  // Matched cards no longer have click events
   firstCard.off("click");
   secondCard.off("click");
 
@@ -260,6 +281,7 @@ function handleMatch() {
   }
 }
 
+// Handle cards that do not match
 function handleNoMatch() {
   setTimeout(function () {
     firstCard.removeClass("flip");
@@ -269,14 +291,17 @@ function handleNoMatch() {
   }, FLIP_DELAY_MS);
 }
 
+// Reset selected cards for the next turn
 function resetTurn() {
   firstCard = undefined;
   secondCard = undefined;
   lockBoard = false;
 }
 
+// Update the timer during the game
 function startTimer() {
   clearInterval(timer);
+
   timer = setInterval(function () {
     if (!gameActive || gameEnded) {
       return;
@@ -291,10 +316,12 @@ function startTimer() {
   }, 1000);
 }
 
+// End the game with win or lose message
 function endGame(didWin) {
   gameEnded = true;
   gameActive = false;
   lockBoard = true;
+
   clearInterval(timer);
   $(".card").off("click");
 
@@ -308,6 +335,7 @@ function endGame(didWin) {
   }
 }
 
+// Power-up feature: temporarily reveal all unmatched cards
 function usePowerUp() {
   if (!gameActive || gameEnded || powerUpUsed) {
     return;
@@ -315,7 +343,9 @@ function usePowerUp() {
 
   powerUpUsed = true;
   lockBoard = true;
+
   $("#powerBtn").prop("disabled", true);
+
   showMessage(
     "Power up activated! All unmatched cards are shown for 2 seconds.",
   );
@@ -326,6 +356,7 @@ function usePowerUp() {
   setTimeout(function () {
     cardsToShow.each(function () {
       const card = $(this);
+
       if (
         !card.hasClass("matched") &&
         card[0] !== firstCard?.[0] &&
@@ -340,6 +371,7 @@ function usePowerUp() {
   }, POWER_UP_MS);
 }
 
+// Theme switching logic
 function switchTheme() {
   if (currentTheme === "light") {
     currentTheme = "dark";
@@ -352,6 +384,7 @@ function switchTheme() {
   }
 }
 
+// Update the status header during the game
 function updateStatus() {
   $("#timeLeft").text(timeLeft + "s");
   $("#timeElapsed").text(maxTime - timeLeft + "s");
@@ -361,13 +394,16 @@ function updateStatus() {
   $("#pairsLeft").text(totalPairs - pairsMatched);
 }
 
+// Show the current time
 function updateClock() {
   const now = new Date();
   $("#currentTime").text(now.toLocaleTimeString());
 }
 
+// Show messages to the player
 function showMessage(text, type) {
   const message = $("#message");
+
   message.removeClass("win lose");
 
   if (type) {
